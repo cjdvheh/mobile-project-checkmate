@@ -13,7 +13,7 @@ export const INITIAL_CATEGORIES = [
   { name: "생활", color: CATEGORY_COLORS[2] },
 ];
 
-export const FILTERS = ["전체", "할 일", "완료"];
+export const FILTERS = ["전체", "미완료", "완료"];
 
 export const INITIAL_TASKS = [
   { id: 1, title: "주간 회의 자료 정리하기", category: "업무", done: false },
