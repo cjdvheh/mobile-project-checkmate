@@ -1,11 +1,29 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CATEGORY_COLORS, INITIAL_CATEGORIES, INITIAL_TASKS } from "../constants/tasks";
+import { loadData, saveData } from "../utils/storage";
 
 export default function useTodos() {
+  const [loaded, setLoaded] = useState(false);
   const [tasks, setTasks] = useState(INITIAL_TASKS);
   const [categories, setCategories] = useState(INITIAL_CATEGORIES);
   const [filter, setFilter] = useState("전체");
   const [category, setCategory] = useState("전체");
+
+  // 저장된 게 없을 때(null)만 더미 데이터를 쓰고, 빈 목록([])은 그대로 둔다
+  useEffect(() => {
+    loadData().then((data) => {
+      if (data) {
+        setTasks(data.tasks);
+        setCategories(data.categories);
+      }
+      setLoaded(true);
+    });
+  }, []);
+
+  // 불러오기 전에 저장하면 더미 데이터가 저장된 데이터를 덮어쓴다
+  useEffect(() => {
+    if (loaded) saveData({ tasks, categories });
+  }, [loaded, tasks, categories]);
 
   const visible = useMemo(
     () =>
@@ -62,6 +80,7 @@ export default function useTodos() {
     });
 
   return {
+    loaded,
     tasks, categories, visible,
     filter, setFilter, category, setCategory,
     addTask, toggleTask, removeTask,

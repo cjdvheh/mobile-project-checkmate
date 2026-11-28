@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StatusBar, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import Header from "../components/Header";
@@ -14,12 +14,21 @@ import useTodos from "../hooks/useTodos";
 export default function App() {
   const insets = useSafeAreaInsets();
   const {
+    loaded,
     tasks, categories, visible,
     filter, setFilter, category, setCategory,
     addTask, toggleTask, removeTask,
     addCategory, renameCategory, deleteCategory, moveCategory,
   } = useTodos();
   const [manageOpen, setManageOpen] = useState(false);
+
+  if (!loaded) {
+    return (
+      <View style={[styles.safe, styles.center]}>
+        <ActivityIndicator size="large" color="#171815" />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.safe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -61,5 +70,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#f8f8f6" },
+  center: { alignItems: "center", justifyContent: "center" },
   top: { paddingHorizontal: 24 },
 });
