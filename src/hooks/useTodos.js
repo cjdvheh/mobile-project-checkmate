@@ -44,6 +44,13 @@ export default function useTodos() {
 
   const removeTask = (id) => setTasks((cur) => cur.filter((t) => t.id !== id));
 
+  const editTask = (id, { title, category: cat }) => {
+    const text = title.trim();
+    if (!text || text.length > 100) return false;
+    setTasks((cur) => cur.map((t) => (t.id === id ? { ...t, title: text, category: cat } : t)));
+    return true;
+  };
+
   // ---- 카테고리 (성공하면 true 반환) ----
   const addCategory = (name) => {
     const n = name.trim();
@@ -84,6 +91,7 @@ export default function useTodos() {
     tasks, categories, visible,
     filter, setFilter, category, setCategory,
     addTask, toggleTask, removeTask,
+    editTask,
     addCategory, renameCategory, deleteCategory, moveCategory,
   };
 }
